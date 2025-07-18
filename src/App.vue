@@ -1,48 +1,36 @@
 <template>
-  <div id="app">
-    <VHeader />
-
-    <main>
-      <HomeSection />
-      <AboutSection />
-      <ServicesSection />
-      <ContactsSection />
+  <div id="app" class="app-layout">
+    <MainHeader />
+    <main class="main-content">
+      <router-view />
     </main>
-
-    <VFooter />
+    <MainFooter />
   </div>
 </template>
 
 <script>
-import VHeader from './components/VHeader.vue';
-import VFooter from './components/VFooter.vue';
-import HomeSection from './components/HomeSection.vue';
-import AboutSection from './components/AboutSection.vue';
-import ServicesSection from './components/ServicesSection.vue';
-import ContactsSection from './components/ContactsSection.vue';
+import MainHeader from './components/MainHeader.vue';
+import MainFooter from './components/MainFooter.vue';
 
 export default {
   name: 'App',
   components: {
-    VHeader,
-    VFooter,
-    HomeSection,
-    AboutSection,
-    ServicesSection,
-    ContactsSection
+    MainHeader,
+    MainFooter
   }
 };
 </script>
 
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: #fff8f3;
-  color: #333;
-  scroll-behavior: smooth;
+<style lang="scss">
+@import './styles/main.scss';
+
+.app-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
-main {
-  padding: 20px;
+
+.main-content {
+  flex: 1;
 }
 </style>
