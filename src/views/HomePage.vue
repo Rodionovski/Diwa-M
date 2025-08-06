@@ -131,8 +131,12 @@ export default {
 
 <style scoped>
 .background-color {
-  background: url('@/assets/images/background.jpg')  no-repeat left bottom;
-  background-size: 100% 661px;
+  background-image: url('@/assets/images/background.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  padding: 28px 0;
 }
 
 .hero-section {
@@ -163,11 +167,12 @@ export default {
   font-size: 1.5rem;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.6s ease;
 }
 
 .hero-button:hover {
-  background-color: #541e54;
+  background-color: black;
+  color: white;
 }
 
 .section {
