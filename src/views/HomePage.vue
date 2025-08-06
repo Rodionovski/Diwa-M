@@ -1,9 +1,13 @@
 <template>
-  <section class="hero-section">
-    <h1 class="hero-title">Салон краси Diwa-M</h1>
-    <p class="hero-description">Твоя краса — наша турбота. Ласкаво просимо до Diwa-M!</p>
-    <button class="hero-button" @click="scrollToSection('about')">Дізнатися більше</button>
-  </section>
+  <div class="background-color">
+    <section class="container">
+      <img class="hero-title" src="@/assets/images/back.png" alt="Logo">
+      <div class="hero-section">
+        <p class="hero-description">Твоя краса — наша турбота.</p>
+        <button class="hero-button" @click="scrollToSection('about')">Дізнатися більше</button>
+      </div>
+    </section>
+  </div>
 
   <section id="about" class="section">
     <h2>Про нас</h2>
@@ -126,35 +130,38 @@ export default {
 </script>
 
 <style scoped>
+.background-color {
+  background: url('@/assets/images/background.jpg')  no-repeat center bottom;
+  background-size: cover;
+}
+
 .hero-section {
-  background-color: #f5c6e1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 400px;
+  height: 280px;
   text-align: center;
-  padding: 20px;
-  color: #3a003a;
 }
 
 .hero-title {
-  font-size: 3rem;
-  margin-bottom: 15px;
-  font-weight: bold;
+  width: 100%;
+  height: 100%;
+  margin-top: 5%;
 }
 
 .hero-description {
-  font-size: 1.5rem;
-  margin-bottom: 25px;
+  font-size: 2.5rem;
+  margin-bottom: 35px;
+  width: 100%;
+  color: #000000;
 }
 
 .hero-button {
-  background-color: #7a2f78;
-  color: white;
+  color: black;
   border: none;
   padding: 12px 30px;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
@@ -250,7 +257,7 @@ export default {
   height: auto;
   border-radius: 10px;
   object-fit: cover;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .gallery-button {
@@ -270,7 +277,7 @@ export default {
   background: #fff;
   padding: 15px;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
   width: 200px;
   transition: transform 0.3s;
