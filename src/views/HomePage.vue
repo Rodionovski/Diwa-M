@@ -4,7 +4,12 @@
       <img class="hero-title" src="@/assets/images/back.png" alt="Logo">
       <div class="hero-section">
         <p class="hero-description">Твоя краса — наша турбота.</p>
-        <button class="hero-button" @click="scrollToSection('about')">Дізнатися більше</button>
+        <button class="hero-button" @click="scrollToSection('about')">
+          <span class="bottom"></span>
+          <span class="left"></span>
+          <span class="right"></span>
+          Дізнатися більше
+        </button>
       </div>
     </section>
   </div>
@@ -161,18 +166,69 @@ export default {
 }
 
 .hero-button {
+  position: relative;
+  padding: 12px 40px;
+  background: transparent;
   color: black;
-  border: none;
-  padding: 12px 30px;
-  font-size: 1.5rem;
-  border-radius: 5px;
+  font-size: 21px;
   cursor: pointer;
-  transition: background-color 0.6s ease;
+  border: none;
+  outline: none;
+  overflow: hidden;
 }
 
-.hero-button:hover {
-  background-color: black;
-  color: white;
+.hero-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 30%;
+  background: #fff;
+  transition: all 0.4s ease;
+}
+
+.hero-button span.left {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 2px;
+  height: 70%;
+  background: #fff;
+  transition: all 0.4s ease;
+}
+
+.hero-button span.right {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 2px;
+  height: 70%;
+  background: #fff;
+  transition: all 0.4s ease;
+}
+
+.hero-button span.bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 2px;
+  width: 30%;
+  background: #fff;
+  transition: all 0.4s ease;
+}
+
+.hero-button:hover::before {
+  width: 100%;
+}
+
+.hero-button:hover span.bottom {
+  width: 100%;
+}
+
+.hero-button:hover span.left,
+.hero-button:hover span.right {
+  height: 100%;
 }
 
 .section {
