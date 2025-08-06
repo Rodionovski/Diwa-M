@@ -39,8 +39,8 @@ export default {
 
 <style scoped lang="scss">
 .main-header {
-  background: url('@/assets/images/background.jpg') no-repeat center top;
-  background-size: cover;
+  background: url('@/assets/images/background.jpg') no-repeat left top;
+  background-size: 100% 661px;
   padding: 1rem;
   width: 100%;
   margin: 0;

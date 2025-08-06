@@ -131,8 +131,8 @@ export default {
 
 <style scoped>
 .background-color {
-  background: url('@/assets/images/background.jpg')  no-repeat center bottom;
-  background-size: cover;
+  background: url('@/assets/images/background.jpg')  no-repeat left bottom;
+  background-size: 100% 661px;
 }
 
 .hero-section {
@@ -140,7 +140,6 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 280px;
   text-align: center;
 }
 
