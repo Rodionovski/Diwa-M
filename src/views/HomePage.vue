@@ -1,5 +1,5 @@
 <template>
-  <div class="background-color">
+  <div class="background-color-hero">
     <section class="container">
       <img class="hero-title" src="@/assets/images/back.png" alt="Logo">
       <div class="hero-section">
@@ -15,24 +15,26 @@
   </div>
 
   <section id="about" class="section">
-    <h2>Про нас</h2>
-    <p>
-      Ласкаво просимо до нашого салону краси — місця, де кожен клієнт стає частиною великої сім’ї, а краса розквітає в
-      унікальному стилі. Ми з любов’ю та відповідальністю працюємо над тим, щоб дарувати вам не просто
-      послуги, а справжні емоції та впевненість у собі.
-
-      Наш колектив — це команда справжніх професіоналів, які постійно вдосконалюють свої навички, слідкують за сучасними
-      трендами та використовують тільки найкращі матеріали. Ми розуміємо, наскільки важливо відчувати себе комфортно і
-      доглянуто, тому створюємо затишну атмосферу, де ви можете розслабитися і насолодитися процесом перетворення.
-
-      У нашому салоні кожен клієнт — це особлива історія, яку ми допомагаємо розповісти через стиль, красу та
-      індивідуальний підхід. Ми не просто виконуємо процедури — ми створюємо ваш ідеальний образ, який підкреслить вашу
-      унікальність і додасть впевненості у будь-якій ситуації.
-
-      Якщо ви шукаєте місце, де вас почують, зрозуміють і подбають про вас на найвищому рівні — ви знайшли саме його.
-      Запишіться до нас вже сьогодні і зробіть перший крок до оновлення, яке змінить ваше життя на краще. Дозвольте собі
-      бути найкращою версією себе — ми допоможемо вам у цьому!
-    </p>
+    <div class="container">
+      <div class="title-text">Про нас</div>
+      <div class="about-content">
+        <img class="about-title" src="@/assets/images/background2.jpg" alt="Logo">
+        <div class="about-text">
+          Ласкаво просимо до нашого салону краси — місця, де кожен клієнт стає частиною великої сім’ї, а краса розквітає
+          в унікальному стилі. Ми з любов’ю та відповідальністю працюємо над тим, щоб дарувати вам не просто
+          послуги, а справжні емоції та впевненість у собі.
+          Наш колектив — це команда справжніх професіоналів, які постійно вдосконалюють свої навички, слідкують за
+          сучасними трендами та використовують тільки найкращі матеріали. Ми розуміємо, наскільки важливо відчувати себе
+          комфортно
+          і доглянуто, тому створюємо затишну атмосферу, де ви можете розслабитися і насолодитися процесом перетворення.
+          У нашому салоні кожен клієнт — це особлива історія, яку ми допомагаємо розповісти через стиль, красу та
+          індивідуальний підхід. Ми не просто виконуємо процедури — ми створюємо ваш ідеальний образ, який підкреслить
+          вашу унікальність і додасть впевненості у будь-якій ситуації.
+          Якщо ви шукаєте місце, де вас почують, зрозуміють і подбають про вас на найвищому рівні — ви знайшли саме
+          його.
+        </div>
+      </div>
+    </div>
   </section>
 
   <section id="services" class="section">
@@ -135,105 +137,130 @@ export default {
 </script>
 
 <style scoped>
-.background-color {
-  background-image: url('@/assets/images/background.jpg');
-  background-repeat: no-repeat;
+.background-color-hero {
+  background: url('@/assets/images/background.jpg') no-repeat center top;
   background-size: cover;
-  background-position: center;
-  height: 100%;
-  padding: 28px 0;
-}
-
-.hero-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-
-.hero-title {
-  width: 100%;
-  height: 100%;
-  margin-top: 5%;
-}
-
-.hero-description {
-  font-size: 2.5rem;
-  margin-bottom: 35px;
-  width: 100%;
-  color: #000000;
-}
-
-.hero-button {
+  padding: 20px 0;
   position: relative;
-  padding: 12px 40px;
-  background: transparent;
+  top: -100px;
+
+  .hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-title {
+    width: 100%;
+    height: 100%;
+    margin-top: 5%;
+  }
+
+  .hero-description {
+    font-size: 2.5rem;
+    margin-bottom: 35px;
+    width: 100%;
+    color: #000000;
+  }
+
+  .hero-button {
+    position: relative;
+    padding: 12px 40px;
+    background: transparent;
+    color: black;
+    font-size: 21px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+    overflow: hidden;
+  }
+
+  .hero-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 30%;
+    background: #fff;
+    transition: all 0.4s ease;
+  }
+
+  .hero-button span.left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 70%;
+    background: #fff;
+    transition: all 0.4s ease;
+  }
+
+  .hero-button span.right {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 2px;
+    height: 70%;
+    background: #fff;
+    transition: all 0.4s ease;
+  }
+
+  .hero-button span.bottom {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    height: 2px;
+    width: 30%;
+    background: #fff;
+    transition: all 0.4s ease;
+  }
+
+  .hero-button:hover::before {
+    width: 100%;
+  }
+
+  .hero-button:hover span.bottom {
+    width: 100%;
+  }
+
+  .hero-button:hover span.left,
+  .hero-button:hover span.right {
+    height: 100%;
+  }
+}
+
+.title-text {
+  font-size: 4rem;
+  margin-top: -8%;
+  margin-bottom: 15px;
   color: black;
-  font-size: 21px;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  overflow: hidden;
 }
 
-.hero-button::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 30%;
-  background: #fff;
-  transition: all 0.4s ease;
-}
-
-.hero-button span.left {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 2px;
-  height: 70%;
-  background: #fff;
-  transition: all 0.4s ease;
-}
-
-.hero-button span.right {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 2px;
-  height: 70%;
-  background: #fff;
-  transition: all 0.4s ease;
-}
-
-.hero-button span.bottom {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  height: 2px;
-  width: 30%;
-  background: #fff;
-  transition: all 0.4s ease;
-}
-
-.hero-button:hover::before {
+.about-content {
   width: 100%;
-}
+  height: 60vh;
+  padding: 30px 0;
 
-.hero-button:hover span.bottom {
-  width: 100%;
-}
+  .about-title {
+    float: left;
+    width: 40%;
+    height: auto;
+    padding-right: 10px;
+  }
 
-.hero-button:hover span.left,
-.hero-button:hover span.right {
-  height: 100%;
+  .about-text {
+    font-size: 1.3rem;
+    width: 100%;
+    height: 100%;
+    color: black;
+  }
 }
 
 .section {
-  padding: 40px 20px;
-  max-width: 800px;
+  width: 100%;
   margin: 0 auto 40px auto;
   text-align: center;
   color: #3a003a;
@@ -272,37 +299,37 @@ export default {
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin: 30px 0;
-}
 
-.service-item {
-  background-color: #fff0fa;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-  text-align: center;
-  transition: transform 0.2s ease;
-}
+  .service-item {
+    background-color: #fff0fa;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    transition: transform 0.2s ease;
+  }
 
-.service-item:hover {
-  transform: translateY(-5px);
-}
+  .service-item:hover {
+    transform: translateY(-5px);
+  }
 
-.service-icon {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
-  display: block;
-}
+  .service-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    display: block;
+  }
 
-.service-item h3 {
-  font-size: 1.3rem;
-  margin-bottom: 8px;
-  color: #7a2f78;
-}
+  .service-item h3 {
+    font-size: 1.3rem;
+    margin-bottom: 8px;
+    color: #7a2f78;
+  }
 
-.service-item p {
-  font-size: 1rem;
-  line-height: 1.4;
-  color: #4a004a;
+  .service-item p {
+    font-size: 1rem;
+    line-height: 1.4;
+    color: #4a004a;
+  }
 }
 
 .gallery-grid {
@@ -310,19 +337,19 @@ export default {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
   margin: 20px 0;
-}
 
-.gallery-grid img {
-  width: 100%;
-  height: auto;
-  border-radius: 10px;
-  object-fit: cover;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+  .gallery-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
 
-.gallery-button {
-  display: inline-block;
-  margin-top: 20px;
+  .gallery-button {
+    display: inline-block;
+    margin-top: 20px;
+  }
 }
 
 .team-grid {
@@ -331,28 +358,28 @@ export default {
   justify-content: center;
   gap: 20px;
   margin-top: 30px;
-}
 
-.team-member {
-  background: #fff;
-  padding: 15px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  width: 200px;
-  transition: transform 0.3s;
-}
+  .team-member {
+    background: #fff;
+    padding: 15px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 200px;
+    transition: transform 0.3s;
+  }
 
-.team-member:hover {
-  transform: translateY(-5px);
-}
+  .team-member:hover {
+    transform: translateY(-5px);
+  }
 
-.team-member img {
-  width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 10px;
+  .team-member img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
 }
 
 

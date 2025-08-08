@@ -39,12 +39,10 @@ export default {
 
 <style scoped lang="scss">
 .main-header {
-  background: url('@/assets/images/background.jpg');
-  background-repeat:  no-repeat;
-  background-size: cover;
+  background-color: transparent;
   padding: 1rem;
   width: 100%;
-  margin: 0;
+  z-index: 1;
 }
 
 .logo {
