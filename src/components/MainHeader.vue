@@ -19,9 +19,6 @@
               <router-link to="/gallery">Галерея</router-link>
             </li>
             <li>
-              <router-link to="/employees">Команда</router-link>
-            </li>
-            <li>
               <router-link to="/contacts">Контакти</router-link>
             </li>
           </ul>

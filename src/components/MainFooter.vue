@@ -12,10 +12,10 @@ export default {
 
 <style scoped lang="scss">
 .main-footer {
-  background-color: #f0f0f0;
+  background-color: #8b7858;
   padding: 1rem;
   text-align: center;
   font-size: 0.9rem;
-  color: #666;
+  color: black;
 }
 </style>
