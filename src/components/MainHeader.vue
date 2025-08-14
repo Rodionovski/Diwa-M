@@ -1,5 +1,5 @@
 <template>
-  <header class="main-header">
+  <header :class="headerClasses">
     <div class="container">
       <div class="content-header">
         <div class="logo">
@@ -9,18 +9,10 @@
         </div>
         <nav>
           <ul>
-            <li>
-              <router-link to="/">Головна</router-link>
-            </li>
-            <li>
-              <router-link to="/services">Послуги</router-link>
-            </li>
-            <li>
-              <router-link to="/gallery">Галерея</router-link>
-            </li>
-            <li>
-              <router-link to="/contacts">Контакти</router-link>
-            </li>
+            <li><router-link to="/">Головна</router-link></li>
+            <li><router-link to="/services">Послуги</router-link></li>
+            <li><router-link to="/gallery">Галерея</router-link></li>
+            <li><router-link to="/contacts">Контакти</router-link></li>
           </ul>
         </nav>
       </div>
@@ -28,10 +20,16 @@
   </header>
 </template>
 
-<script>
-export default {
-  name: 'MainHeader'
-};
+<script setup>
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const headerClasses = computed(() => ({
+  'main-header': true,
+  'header-bg': route.path !== '/',
+}))
 </script>
 
 <style scoped lang="scss">
@@ -40,6 +38,11 @@ export default {
   padding: 1rem;
   width: 100%;
   z-index: 1;
+  transition: background-color 0.3s ease;
+}
+
+.header-bg {
+  background-color: #8b7858;
 }
 
 .logo {
