@@ -87,30 +87,6 @@
       </div>
     </div>
   </section>
-
-  <section id="contacts" class="section">
-    <div class="title-text">Контакти</div>
-    <div class="contact-text">Зв'яжіться з нами для запису або консультації.</div>
-    <div>
-      <a href="tel:+380674247498" class="call-button">
-        <img src="@/assets/images/phone.svg" alt="icon">
-        Подзвонити
-      </a>
-      <a href="https://www.instagram.com/diwa_m_/" target="_blank" class="instagram-button">
-        <img src="@/assets/images/instagram.svg" alt="icon">
-        Instagram
-      </a>
-    </div>
-    <div class="btn">
-      <button class="button" @click="$router.push('/contacts')">
-        <span class="bottom"></span>
-        <span class="left"></span>
-        <span class="right"></span>
-        <slot/>
-        Контактна інформація
-      </button>
-    </div>
-  </section>
 </template>
 
 <script>
@@ -272,83 +248,9 @@ export default {
   }
 
   img {
-    width:  30%;
+    width: 30%;
     height: auto;
     margin-bottom: 20px;
-  }
-}
-
-#contacts {
-  width: 100%;
-  background-color: #8b7858;
-  border-bottom: 5px solid #5d492b;
-  padding: 15px 0;
-  margin-bottom: 0;
-
-  .title-text {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    color: black;
-  }
-
-  .contact-text {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
-    color: black;
-  }
-
-  .call-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    margin-bottom: 15px;
-    background-color: tan;
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-
-  .call-button:hover {
-    transform: scale(1.05);
-  }
-
-  .call-button:active {
-    transform: scale(0.98);
-  }
-
-  .instagram-button {
-    margin-left: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 12px 20px;
-    background-color: tan;
-    color: black;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-    border-radius: 50px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease, transform 0.2s ease;
-  }
-
-  img {
-    width: 30px;
-    height: auto;
-    margin-right: 5px;
-  }
-
-  .instagram-button:hover {
-    transform: scale(1.05);
-  }
-
-  .instagram-button:active {
-    transform: scale(0.98);
   }
 }
 

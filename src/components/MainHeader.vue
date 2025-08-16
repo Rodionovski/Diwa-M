@@ -9,10 +9,15 @@
         </div>
         <nav>
           <ul>
-            <li><router-link to="/">Головна</router-link></li>
-            <li><router-link to="/services">Послуги</router-link></li>
-            <li><router-link to="/gallery">Галерея</router-link></li>
-            <li><router-link to="/contacts">Контакти</router-link></li>
+            <li>
+              <router-link to="/">Головна</router-link>
+            </li>
+            <li>
+              <router-link to="/services">Послуги</router-link>
+            </li>
+            <li>
+              <router-link to="/gallery">Галерея</router-link>
+            </li>
           </ul>
         </nav>
       </div>
@@ -21,8 +26,8 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
+import {computed} from 'vue'
+import {useRoute} from 'vue-router'
 
 const route = useRoute()
 
@@ -99,5 +104,33 @@ const headerClasses = computed(() => ({
   a.router-link-active {
     color: black;
   }
+}
+
+.call-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 10px;
+  margin-bottom: 15px;
+  background-color: tan;
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 50px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, transform 0.2s ease;
+
+  img {
+    width: 2rem;
+  }
+}
+
+.call-button:hover {
+  transform: scale(1.05);
+}
+
+.call-button:active {
+  transform: scale(0.98);
 }
 </style>
