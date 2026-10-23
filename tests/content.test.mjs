@@ -82,3 +82,48 @@ test('database failures are surfaced instead of reporting success', async () => 
   await assert.rejects(readPublished(client), /permission denied/);
   await assert.rejects(savePublished(client, defaults, 1), /permission denied/);
 });
+
+test('legacy published content gets optional sections without losing prices', async () => {
+  const result = await readPublished(database({ data: defaults, revision: 3 }));
+  assert.deepEqual(result.data.reviews, []);
+  assert.equal(result.data.faqs.length, 4);
+  assert.deepEqual(result.data.sections, defaults.sections);
+  assert.equal(result.revision, 3);
+});
+
+test('reviews and FAQ edits persist for public visitors, including intentionally empty lists', async () => {
+  const client = database({ data: defaults, revision: 1 });
+  const { data } = await readPublished(client);
+  data.reviews.push({ id: 'test-only', name: 'Тест', service: 'Тестова послуга', text: 'Тестовий відгук, лише в тесті.', rating: 4, source: 'https://example.com/review' });
+  data.faqs = [{ id: 'test-faq', question: 'Тестове запитання?', answer: 'Тестова відповідь.' }];
+  await savePublished(client, data, 1);
+  const saved = await readPublished(client);
+  assert.deepEqual(saved.data.reviews, data.reviews);
+  assert.deepEqual(saved.data.faqs, data.faqs);
+  await savePublished(client, { ...saved.data, reviews: [], faqs: [] }, 2);
+  const cleared = await readPublished(client);
+  assert.deepEqual(cleared.data.reviews, []);
+  assert.deepEqual(cleared.data.faqs, []);
+});
+
+test('invalid reviews and unsafe source URLs cannot be published', async () => {
+  const review = { id: 'test', name: 'Тест', service: '', text: 'Тестовий текст.', rating: 5, source: '' };
+  for (const patch of [{ name: '' }, { text: '' }, { rating: 6 }, { rating: 0 }, { rating: 2.5 }, { source: 'javascript:alert(1)' }, { source: 'http://example.com' }, { source: 'https://user:password@example.com' }, { text: 'x'.repeat(1501) }]) {
+    const data = { ...defaults, reviews: [{ ...review, ...patch }] };
+    assert.equal(validateContent(data), false, JSON.stringify(patch));
+    await assert.rejects(savePublished({ from() { assert.fail('invalid input must not reach DB'); } }, data, 1));
+  }
+  assert.equal(validateContent({ ...defaults, reviews: [review, review] }), false);
+  assert.equal(validateContent({ ...defaults, reviews: null }), false);
+  assert.equal(validateContent({ ...defaults, faqs: [{ id: 'a', question: ' ', answer: 'text' }] }), false);
+});
+
+test('review edits keep concurrency protection and do not mutate initial FAQ defaults', async () => {
+  const client = database({ data: defaults, revision: 1 });
+  const first = await readPublished(client);
+  const second = await readPublished(client);
+  first.data.faqs[0].answer = 'Змінено лише в першому редакторі.';
+  assert.notEqual(second.data.faqs[0].answer, first.data.faqs[0].answer);
+  await savePublished(client, first.data, 1);
+  await assert.rejects(savePublished(client, second.data, 1), /Інший адміністратор/);
+});

@@ -2,6 +2,7 @@ import { reactive } from 'vue';
 import { createClient } from '@supabase/supabase-js';
 import { readPublished, savePublished } from './contentRepository.mjs';
 import defaults from '@/data/content.json';
+import { withContentExtras } from './contentExtras.mjs';
 import p1 from '@/assets/images/galery1.webp';
 import p2 from '@/assets/images/galery2.jpg';
 import p3 from '@/assets/images/galery3.jpeg';
@@ -14,7 +15,7 @@ const url = process.env.VUE_APP_SUPABASE_URL;
 const key = process.env.VUE_APP_SUPABASE_ANON_KEY;
 export const supabase = url && key ? createClient(url, key) : null;
 export const content = reactive({
-  data: JSON.parse(JSON.stringify(defaults)),
+  data: withContentExtras(JSON.parse(JSON.stringify(defaults))),
   revision: null,
   loading: false,
   error: '',

@@ -25,6 +25,8 @@
         <div class="admin-tabs" role="group" aria-label="Розділи керування">
           <button :aria-pressed="tab === 'photos'" @click="tab = 'photos'">Приклади робіт ({{ draft.photos.length }})</button>
           <button :aria-pressed="tab === 'prices'" @click="tab = 'prices'">Послуги та прайс</button>
+          <button :aria-pressed="tab === 'reviews'" @click="tab = 'reviews'">Відгуки ({{ draft.reviews.length }})</button>
+          <button :aria-pressed="tab === 'faqs'" @click="tab = 'faqs'">Запитання та відповіді</button>
         </div>
         <fieldset :disabled="busy" class="admin-editor">
           <div v-if="tab === 'photos'">
@@ -40,7 +42,7 @@
               </article>
             </div>
           </div>
-          <div v-else>
+          <div v-else-if="tab === 'prices'">
             <h2>Послуги та прайс</h2>
             <p class="admin-help">Ціну можна вказати текстом: «450 грн», «від 600 грн» або «500–700 грн».</p>
             <article v-for="section in draft.sections" :key="section.id" class="admin-price-section">
@@ -60,6 +62,32 @@
             </article>
             <button @click="draft.sections.push({ id: id(), name: '', groups: [] })">+ Додати розділ</button>
           </div>
+          <div v-else-if="tab === 'reviews'">
+            <h2>Відгуки клієнтів</h2>
+            <p class="admin-help">Додавайте справжні відгуки з дозволу клієнтів. Ім’я, текст і посилання на джерело будуть публічними. Порядок карток тут відповідає порядку на головній.</p>
+            <p v-if="!draft.reviews.length" class="admin-notice">Відгуків поки немає. Блок з’явиться на головній після публікації першого відгуку.</p>
+            <article v-for="(review, index) in draft.reviews" :key="review.id" class="admin-text-card">
+              <div class="admin-section-title">
+                <label>Ім’я клієнта<input v-model.trim="review.name" maxlength="100" placeholder="Ім’я або ініціали"></label>
+                <label>Оцінка<select v-model.number="review.rating"><option v-for="rating in 5" :key="rating" :value="rating">{{ rating }} з 5</option></select></label>
+              </div>
+              <label>Послуга (необов’язково)<input v-model.trim="review.service" maxlength="120" placeholder="Наприклад, фарбування волосся"></label>
+              <label>Текст відгуку<textarea v-model.trim="review.text" rows="5" maxlength="1500" placeholder="Слова вашого клієнта"></textarea></label>
+              <label>Посилання на оригінал (необов’язково)<input v-model.trim="review.source" type="url" maxlength="500" placeholder="https://…"></label>
+              <div class="admin-photo-actions"><button :disabled="index === 0" aria-label="Перемістити відгук раніше" @click="moveEntry(draft.reviews, index, -1)">↑</button><button :disabled="index === draft.reviews.length - 1" aria-label="Перемістити відгук пізніше" @click="moveEntry(draft.reviews, index, 1)">↓</button><button class="danger" @click="removeReview(review)">Видалити відгук</button></div>
+            </article>
+            <button :disabled="draft.reviews.length >= 100" @click="draft.reviews.push({ id: id(), name: '', service: '', text: '', rating: 5, source: '' })">+ Додати відгук</button>
+          </div>
+          <div v-else-if="tab === 'faqs'">
+            <h2>Запитання та відповіді</h2>
+            <p class="admin-help">Короткі відповіді допоможуть клієнтам підготуватися до візиту. Перевірте початкові тексти й доповніть їх правилами вашої студії.</p>
+            <article v-for="(faq, index) in draft.faqs" :key="faq.id" class="admin-text-card">
+              <label>Запитання<input v-model.trim="faq.question" maxlength="200"></label>
+              <label>Відповідь<textarea v-model.trim="faq.answer" rows="4" maxlength="1500"></textarea></label>
+              <div class="admin-photo-actions"><button :disabled="index === 0" aria-label="Перемістити запитання раніше" @click="moveEntry(draft.faqs, index, -1)">↑</button><button :disabled="index === draft.faqs.length - 1" aria-label="Перемістити запитання пізніше" @click="moveEntry(draft.faqs, index, 1)">↓</button><button class="danger" @click="removeFaq(faq)">Видалити запитання</button></div>
+            </article>
+            <button :disabled="draft.faqs.length >= 30" @click="draft.faqs.push({ id: id(), question: '', answer: '' })">+ Додати запитання</button>
+          </div>
         </fieldset>
       </template>
     </template>
@@ -71,6 +99,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { supabase, content, loadContent, publishContent, photoUrl } from '@/lib/content';
+import { validateContent } from '@/lib/contentRepository.mjs';
 
 const session = ref(null);
 const booting = ref(Boolean(supabase));
@@ -156,10 +185,17 @@ function addPhotos(event) {
   }
   event.target.value = '';
 }
-function movePhoto(index, direction) {
-  const photos = draft.value.photos;
-  const [photo] = photos.splice(index, 1);
-  photos.splice(index + direction, 0, photo);
+function moveEntry(entries, index, direction) {
+  if (index + direction < 0 || index + direction >= entries.length) return;
+  const [entry] = entries.splice(index, 1);
+  entries.splice(index + direction, 0, entry);
+}
+function movePhoto(index, direction) { moveEntry(draft.value.photos, index, direction); }
+function removeReview(review) {
+  if (window.confirm('Видалити цей відгук? Зміна набуде чинності після публікації.')) draft.value.reviews = draft.value.reviews.filter((entry) => entry.id !== review.id);
+}
+function removeFaq(faq) {
+  if (window.confirm('Видалити це запитання?')) draft.value.faqs = draft.value.faqs.filter((entry) => entry.id !== faq.id);
 }
 function removePhoto(photo) {
   if (!window.confirm('Прибрати це фото з галереї? Зміна набуде чинності після публікації.')) return;
@@ -181,6 +217,12 @@ async function publish() {
   if (draft.value.photos.some((p) => !p.title) || draft.value.sections.some((s) => !s.name || s.groups.some((g) => !g.name || g.items.some((i) => !i.name)))) {
     error.value = 'Заповніть назви розділів, груп, послуг та описи фото перед публікацією.'; return;
   }
+  const check = JSON.parse(JSON.stringify(draft.value));
+  check.photos = check.photos.map((photo) => files.has(photo.id) ? { ...photo, path: 'pending-upload' } : photo);
+  if (!validateContent(check)) {
+    error.value = 'Перевірте заповнення всіх полів. Для відгуків потрібні ім’я та текст; посилання на джерело має починатися з https://. Для запитань потрібні запитання й відповідь.';
+    return;
+  }
   busy.value = true;
   try {
     const next = JSON.parse(JSON.stringify(draft.value));
@@ -196,7 +238,7 @@ async function publish() {
     }
     await publishContent(next, revision.value);
     setDraft();
-    message.value = 'Опубліковано! Фото та прайс уже доступні відвідувачам після оновлення сторінки.';
+    message.value = 'Опубліковано! Зміни вже доступні відвідувачам після оновлення сторінки.';
     // Keep removed published files in storage: older browser tabs can still reference them.
   } catch (failure) {
     // Never delete uploaded files on ambiguous network failures: the publish may have committed.
@@ -241,8 +283,8 @@ button { font: inherit; cursor: pointer; border: 1px solid var(--line); padding:
 button:disabled { opacity: .5; cursor: default; }
 .button-primary { background: var(--olive); color: white; }
 label { display: flex; flex-direction: column; gap: 8px; font-size: 12px; }
-input { width: 100%; min-width: 0; padding: 12px; background: white; border: 1px solid var(--line); border-radius: 0; color: var(--ink); font: inherit; font-size: 15px; }
-input:focus-visible { outline: 2px solid var(--olive); outline-offset: 2px; }
+input, textarea, select { width: 100%; min-width: 0; padding: 12px; background: white; border: 1px solid var(--line); border-radius: 0; color: var(--ink); font: inherit; font-size: 15px; }
+input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--olive); outline-offset: 2px; }
 .admin-login { max-width: 440px; display: grid; gap: 22px; background: var(--paper); padding: 28px; }
 .admin-login p, .admin-help, .admin-toolbar p { font-size: 12px; color: var(--muted); line-height: 1.8; }
 .admin-account { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 13px; overflow-wrap: anywhere; }
@@ -264,6 +306,10 @@ input:focus-visible { outline: 2px solid var(--olive); outline-offset: 2px; }
 .admin-price-row { display: grid; grid-template-columns: minmax(0, 2fr) minmax(100px, 1fr) auto auto; gap: 12px; align-items: end; margin-bottom: 18px; }
 .checkbox-label { flex-direction: row; align-items: center; align-self: center; margin-top: 22px; }
 .checkbox-label input { width: auto; }
+textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
+.admin-text-card { display: grid; gap: 20px; background: var(--paper); padding: 24px; margin: 24px 0; }
+.admin-text-card .admin-section-title { margin-bottom: 0; }
+.admin-text-card .admin-section-title label:last-child { flex: .4; }
 .admin-note { margin-top: 22px; }
 .admin-notice, .admin-message { padding: 20px; background: var(--paper); margin: 25px 0; line-height: 1.7; font-size: 14px; }
 .admin-message { border: 1px solid var(--line); box-shadow: 0 4px 24px #2b292714; }

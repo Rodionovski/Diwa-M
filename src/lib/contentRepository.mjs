@@ -1,8 +1,20 @@
+import { withContentExtras } from './contentExtras.mjs';
+
 export function validateContent(data) {
   const text = (value, max, required = true) => typeof value === 'string' && value.length <= max && (!required || value.trim().length > 0);
   const identified = (rows, limit) => Array.isArray(rows) && rows.length <= limit &&
     rows.every((row) => row && text(row.id, 100)) && new Set(rows.map((row) => row.id)).size === rows.length;
   if (!data || !identified(data.sections, 30) || !identified(data.photos, 300)) return false;
+  const safeLink = (value) => {
+    if (value === '') return true;
+    try { const url = new URL(value); return url.protocol === 'https:' && !url.username && !url.password; } catch { return false; }
+  };
+  if (data.reviews !== undefined && (!identified(data.reviews, 100) || !data.reviews.every((review) =>
+    text(review.name, 100) && text(review.service, 120, false) && text(review.text, 1500) &&
+    Number.isInteger(review.rating) && review.rating >= 1 && review.rating <= 5 &&
+    text(review.source, 500, false) && safeLink(review.source)))) return false;
+  if (data.faqs !== undefined && (!identified(data.faqs, 30) || !data.faqs.every((faq) =>
+    text(faq.question, 200) && text(faq.answer, 1500)))) return false;
   return data.sections.every((section) => text(section.name, 120) && identified(section.groups, 50) &&
     section.groups.every((group) => text(group.name, 120) && text(group.note, 400, false) && identified(group.items, 100) &&
       group.items.every((item) => text(item.name, 200) && text(item.price, 80, false) && typeof item.divider === 'boolean'))) &&
@@ -13,7 +25,7 @@ export async function readPublished(client) {
   const { data, error } = await client.from('site_content').select('data, revision').eq('id', 1).single();
   if (error) throw error;
   if (!validateContent(data?.data) || !Number.isInteger(data.revision)) throw new Error('Невірний формат опублікованих даних.');
-  return data;
+  return { ...data, data: withContentExtras(data.data) };
 }
 
 export async function savePublished(client, data, revision) {

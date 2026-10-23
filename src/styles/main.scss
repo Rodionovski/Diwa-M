@@ -142,3 +142,5 @@ nav a:hover, .text-link:hover { color: var(--olive); }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal-pending { opacity: 1; transform: none; }
 }
+
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 22px; }
