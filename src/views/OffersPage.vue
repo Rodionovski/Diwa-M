@@ -4,7 +4,6 @@
       <p class="eyebrow">DIWA-M / БІЛЬШЕ МОЖЛИВОСТЕЙ ДЛЯ ВАС</p>
       <h1>Дарувати емоції.<br><em>Відкривати себе.</em></h1>
       <p>Особливий подарунок близькій людині або нова навичка для себе — оберіть свою маленьку історію краси.</p>
-      <nav class="offers-nav" aria-label="Пропозиції студії"><router-link v-if="offers.certificate.visible" :to="{ name: 'offers', hash: '#certificate' }" class="text-link">Подарункові сертифікати</router-link><router-link v-if="offers.course.visible" :to="{ name: 'offers', hash: '#course' }" class="text-link">Навчання та уроки</router-link></nav>
       <p v-if="content.error" role="status">{{ content.error }}</p>
     </header>
 
@@ -50,7 +49,6 @@ const linkAttributes = (url) => url.startsWith('https:') ? { target: '_blank', r
 .offers-intro { padding-top: 65px; padding-bottom: 55px; }
 h1 { font-size: clamp(58px, 7vw, 96px); }
 .offers-intro > p:not(.eyebrow) { max-width: 540px; margin-top: 28px; color: var(--muted); font-size: 14px; line-height: 1.9; }
-.offers-nav { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 25px; }
 .offer-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center; }
 .certificate-section { background: var(--paper); padding: 75px 0; }
 .offer-image { min-width: 0; }
