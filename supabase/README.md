@@ -51,7 +51,7 @@ VUE_APP_SUPABASE_ANON_KEY=YOUR_PUBLIC_ANON_OR_PUBLISHABLE_KEY
 
 - Build Command: `npm ci && npm run build`
 - Publish Directory: `dist`
-- Redirects/Rewrites: Source `/*`, Destination `/index.html`, Action **Rewrite** (не Redirect).
+- Збірка автоматично створює HTML-сторінки для `/admin`, `/services` і `/gallery`, тому прямі посилання працюють без ручних rewrite-правил. Для додаткових майбутніх маршрутів можна налаштувати Redirects/Rewrites: Source `/*`, Destination `/index.html`, Action **Rewrite** (не Redirect).
 
 Збережіть чинний тип сервісу та адресу. Не створюйте новий сервіс замість наявного.
 У Supabase Authentication → URL Configuration вкажіть Site URL `https://diwa-m.onrender.com`.
