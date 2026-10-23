@@ -41,7 +41,7 @@
         <p class="eyebrow">06 / ЗУСТРІНЕМОСЬ У DIWA-M</p>
         <h2 id="visit-title">Почнімо з маленького<br><em>часу для себе.</em></h2>
         <p>Оберіть послугу, напишіть або зателефонуйте нам.<br>Разом узгодимо зручний час для вашого візиту.</p>
-        <div class="visit-actions"><a class="button-primary" href="tel:+380674247498">Обговорити запис </a><router-link class="text-link" to="/services">Спочатку переглянути прайс</router-link></div>
+        <div class="visit-actions"><a class="button-primary" href="tel:+380674247498">Обговорити запис </a><router-link class="text-link" :to="{ name: 'services' }">Спочатку переглянути прайс</router-link></div>
         <ol class="visit-steps"><li><span>01</span>Оберіть послугу</li><li><span>02</span>Узгодьте час</li><li><span>03</span>Завітайте до нас</li></ol>
       </div>
       <div class="visit-address reveal" v-reveal="100">

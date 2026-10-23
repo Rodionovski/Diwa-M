@@ -4,7 +4,7 @@
       <p class="eyebrow">DIWA-M / БІЛЬШЕ МОЖЛИВОСТЕЙ ДЛЯ ВАС</p>
       <h1>Дарувати емоції.<br><em>Відкривати себе.</em></h1>
       <p>Особливий подарунок близькій людині або нова навичка для себе — оберіть свою маленьку історію краси.</p>
-      <nav class="offers-nav" aria-label="Пропозиції студії"><a v-if="offers.certificate.visible" href="#certificate" class="text-link">Подарункові сертифікати</a><a v-if="offers.course.visible" href="#course" class="text-link">Навчання та уроки</a></nav>
+      <nav class="offers-nav" aria-label="Пропозиції студії"><router-link v-if="offers.certificate.visible" :to="{ name: 'offers', hash: '#certificate' }" class="text-link">Подарункові сертифікати</router-link><router-link v-if="offers.course.visible" :to="{ name: 'offers', hash: '#course' }" class="text-link">Навчання та уроки</router-link></nav>
       <p v-if="content.error" role="status">{{ content.error }}</p>
     </header>
 

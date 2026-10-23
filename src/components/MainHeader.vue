@@ -1,7 +1,7 @@
 <template>
   <header class="site-header" @focusout="onFocusOut">
     <div class="container header-inner">
-      <router-link class="wordmark" to="/" aria-label="Diwa-M — головна" @click="closeMenu()">
+      <router-link class="wordmark" :to="{ name: 'home' }" aria-label="Diwa-M — головна" @click="closeMenu()">
         <img src="@/assets/images/back.png" alt="Diwa-M — твоя студія краси" width="818" height="283">
       </router-link>
       <button
@@ -15,10 +15,10 @@
         @click="menuOpen = !menuOpen"
       ><span></span><span></span><span></span></button>
       <nav id="main-navigation" class="main-nav" :class="{ 'mobile-open': menuOpen }" aria-label="Основна навігація">
-        <router-link to="/" @click="closeMenu(true)">Головна</router-link>
-        <router-link to="/services" @click="closeMenu(true)">Послуги та ціни</router-link>
-        <router-link to="/gallery" @click="closeMenu(true)">Наші роботи</router-link>
-        <router-link to="/offers" @click="closeMenu(true)">Сертифікати та навчання</router-link>
+        <router-link :to="{ name: 'home' }" @click="closeMenu(true)">Головна</router-link>
+        <router-link :to="{ name: 'services' }" @click="closeMenu(true)">Послуги та ціни</router-link>
+        <router-link :to="{ name: 'gallery' }" @click="closeMenu(true)">Наші роботи</router-link>
+        <router-link :to="{ name: 'offers' }" @click="closeMenu(true)">Сертифікати та навчання</router-link>
       </nav>
       <a class="header-book" href="tel:+380674247498" @click="closeMenu()">Записатися</a>
     </div>

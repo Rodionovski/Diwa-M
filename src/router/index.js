@@ -1,28 +1,27 @@
+import { nextTick } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-
-import HomePage from '../views/HomePage.vue';
-import ServicesPage from '../views/ServicesPage.vue';
-import GalleryPage from '../views/GalleryPage.vue';
-
-const routes = [
-    { path: '/', component: HomePage },
-    { path: '/services', component: ServicesPage },
-    { path: '/gallery', component: GalleryPage },
-    { path: '/offers', component: () => import('../views/OffersPage.vue') },
-    { path: '/admin', component: () => import('../views/AdminPage.vue') },
-];
+import { routes } from './routes.mjs';
+import { loadContent } from '@/lib/content';
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
-    linkActiveClass: 'router-link-active',
-    scrollBehavior(to, from, savedPosition) {
-        if (savedPosition) {
-            return savedPosition;
-        }
-        if (to.hash) return { el: to.hash, top: 24 };
-        return {top: 0};
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+  linkActiveClass: 'router-link-active',
+  async scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) return savedPosition;
+    if (to.hash) {
+      // Price sections can arrive from Supabase after the page first renders.
+      await loadContent().catch(() => {});
+      await nextTick();
+      if (!document.getElementById(to.hash.slice(1))) return { top: 0 };
+      return {
+        el: to.hash,
+        top: 24,
+        behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth',
+      };
     }
+    return { top: 0 };
+  },
 });
 
 export default router;

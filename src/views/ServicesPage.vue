@@ -6,7 +6,7 @@
       <p>Оберіть свій ритуал краси. Ми подбаємо про деталі.</p>
       <p v-if="content.error" role="status">{{ content.error }}</p>
     </div>
-    <section v-for="section in content.data.sections" :key="section.id">
+    <section v-for="section in content.data.sections" :key="section.id" :id="priceSectionId(section)">
       <div class="container">
         <div class="title"><h2 class="title-text">{{ section.name }}</h2></div>
         <div class="service-card">
@@ -24,6 +24,7 @@
 </template>
 <script setup>
 import { content } from '@/lib/content';
+import { priceSectionId } from '@/lib/navigation.mjs';
 </script>
 <style scoped lang="scss">
 .background { padding: 32px 0 90px; }
