@@ -1,26 +1,13 @@
-<<<<<<< HEAD
-# diwa-M
+# Diwa-M
 
-## Project setup
-```
-npm install
-```
+Сайт студії краси: Vue 3, Vue Router, SCSS. Фото й прайс редагуються через `/admin` після підключення Supabase.
 
-### Compiles and hot-reloads for development
-```
+```sh
+npm ci
 npm run serve
-```
-
-### Compiles and minifies for production
-```
 npm run build
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
+Підключення адмінки, створення адміністраторів і налаштування Render: [supabase/README.md](supabase/README.md).
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
->>>>>>> 2b2f653 (init)
+Публічні параметри Supabase задано у `.env.example`; локальні значення зберігайте у `.env.local`.

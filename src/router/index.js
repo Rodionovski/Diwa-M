@@ -8,6 +8,7 @@ const routes = [
     { path: '/', component: HomePage },
     { path: '/services', component: ServicesPage },
     { path: '/gallery', component: GalleryPage },
+    { path: '/admin', component: () => import('../views/AdminPage.vue') },
 ];
 
 const router = createRouter({

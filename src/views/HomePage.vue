@@ -6,19 +6,18 @@
   </section>
   <section class="services-section" id="services"><div class="container"><div class="section-heading reveal" v-reveal><div><p class="eyebrow">01 / НАШІ ПОСЛУГИ</p><h2>Деталі, що роблять<br><em>вас особливою.</em></h2></div><router-link class="text-link" to="/services">Усі послуги та ціни ↗</router-link></div><div class="editorial-services"><router-link v-for="(service, index) in services" :key="service.name" to="/services" class="editorial-card reveal" v-reveal="index * 90"><div class="service-photo"><img :src="service.image" :alt="service.alt" loading="lazy"><span class="service-number">{{ service.number }}</span><span class="round-arrow">↗</span></div><div class="service-caption"><h3>{{ service.name }}</h3><span>{{ service.description }}</span></div></router-link></div></div></section>
   <section class="about-section container"><div class="about-mark reveal" v-reveal><img src="@/assets/images/back.png" alt="Diwa-M — твоя студія краси" width="818" height="283" loading="lazy"><span class="brand-heart" aria-hidden="true">♡</span><small>КРАСА, СТВОРЕНА З ЛЮБОВ’Ю</small></div><div class="about-copy reveal" v-reveal="120"><p class="eyebrow">02 / ФІЛОСОФІЯ DIWA-M</p><h2>Більше, ніж догляд.<br><em>Відчуття гармонії.</em></h2><p>Ми любимо красу, яка підкреслює вашу індивідуальність. У Diwa-M ми слухаємо, помічаємо деталі й допомагаємо знайти образ, у якому вам комфортно.</p><p>Від нової стрижки до улюбленого відтінку манікюру — тут є місце для маленьких змін і часу тільки для себе.</p><a class="text-link" href="https://www.instagram.com/diwa_m_/" target="_blank" rel="noopener noreferrer">Познайомимось ближче ↗</a></div></section>
-  <section class="gallery-section container"><div class="section-heading reveal" v-reveal><div><p class="eyebrow">03 / НАТХНЕННЯ</p><h2>Краса <em>в деталях.</em></h2></div><router-link class="text-link" to="/gallery">Більше наших робіт ↗</router-link></div><div class="home-gallery"><img v-for="(photo, index) in photos" :key="photo" class="reveal" v-reveal="index * 90" :src="photo" :alt="`Робота майстрів Diwa-M — фото ${index + 1}`" loading="lazy"></div><p class="gallery-note">Кожна робота — маленька історія. Наступна може бути вашою.</p></section>
+  <section class="gallery-section container"><div class="section-heading reveal" v-reveal><div><p class="eyebrow">03 / НАТХНЕННЯ</p><h2>Краса <em>в деталях.</em></h2></div><router-link class="text-link" to="/gallery">Більше наших робіт ↗</router-link></div><div class="home-gallery"><img v-for="(photo, index) in photos" :key="photo.id" class="reveal" v-reveal="index * 90" :src="photoUrl(photo)" :alt="photo.title" loading="lazy"></div><p class="gallery-note">Кожна робота — маленька історія. Наступна може бути вашою.</p></section>
 </template>
 <script setup>
 import hair from '@/assets/images/galery1.webp';
 import nails from '@/assets/images/manicure.jpg';
 import makeup from '@/assets/images/makiyazh.jpg';
-import photo2 from '@/assets/images/galery2.jpg';
-import photo3 from '@/assets/images/galery3.jpeg';
-import photo4 from '@/assets/images/galery4.jpeg';
+import { computed } from 'vue';
+import { content, photoUrl } from '@/lib/content';
 const services = [
   { number: '01', name: 'Мистецтво волосся', description: 'Стрижки · Фарбування · Укладки', image: hair, alt: 'Робота з волоссям у Diwa-M' },
   { number: '02', name: 'Доглянуті до кінчиків', description: 'Манікюр · Педикюр · Дизайн', image: nails, alt: 'Манікюр та догляд за нігтями' },
   { number: '03', name: 'Ваша природна виразність', description: 'Макіяж · Брови · Вії', image: makeup, alt: 'Професійний макіяж' },
 ];
-const photos = [photo2, photo3, photo4];
+const photos = computed(() => content.data.photos.slice(0, 3));
 </script>
