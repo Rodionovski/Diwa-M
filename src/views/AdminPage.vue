@@ -10,7 +10,7 @@
       <h2>Вхід для команди</h2>
       <label>Електронна пошта<input v-model.trim="email" type="email" autocomplete="username" required></label>
       <label>Пароль<input v-model="password" type="password" autocomplete="current-password" required minlength="8"></label>
-      <button class="button-primary" :disabled="busy">{{ busy ? 'Входимо…' : 'Увійти' }} <span>↗</span></button>
+      <button class="button-primary" :disabled="busy">{{ busy ? 'Входимо…' : 'Увійти' }}</button>
       <p>Обліковий запис видає власник студії. Якщо забули пароль, зверніться до нього.</p>
     </form>
     <template v-else-if="session">
@@ -20,13 +20,14 @@
         <div class="admin-toolbar">
           <div><strong>{{ dirty ? 'Є неопубліковані зміни' : 'Усі зміни опубліковано' }}</strong><p>Відвідувачі побачать зміни після публікації.</p></div>
           <button :disabled="busy" @click="reload">Оновити з сайту</button>
-          <button class="button-primary" :disabled="busy || !dirty" @click="publish">{{ busy ? 'Зберігаємо…' : 'Опублікувати зміни' }} <span>↗</span></button>
+          <button class="button-primary" :disabled="busy || !dirty" @click="publish">{{ busy ? 'Зберігаємо…' : 'Опублікувати зміни' }}</button>
         </div>
         <div class="admin-tabs" role="group" aria-label="Розділи керування">
           <button :aria-pressed="tab === 'photos'" @click="tab = 'photos'">Приклади робіт ({{ draft.photos.length }})</button>
           <button :aria-pressed="tab === 'prices'" @click="tab = 'prices'">Послуги та прайс</button>
           <button :aria-pressed="tab === 'reviews'" @click="tab = 'reviews'">Відгуки ({{ draft.reviews.length }})</button>
           <button :aria-pressed="tab === 'faqs'" @click="tab = 'faqs'">Запитання та відповіді</button>
+          <button :aria-pressed="tab === 'offers'" @click="tab = 'offers'">Сертифікати та навчання</button>
         </div>
         <fieldset :disabled="busy" class="admin-editor">
           <div v-if="tab === 'photos'">
@@ -88,6 +89,27 @@
             </article>
             <button :disabled="draft.faqs.length >= 30" @click="draft.faqs.push({ id: id(), question: '', answer: '' })">+ Додати запитання</button>
           </div>
+          <div v-else-if="tab === 'offers'">
+            <h2>Сертифікати та навчання</h2>
+            <p class="admin-help">Ці блоки розміщені на окремій сторінці «Сертифікати та навчання». Тут можна змінити зображення, усі тексти, ціну та посилання кнопки. Початкові ціни й умови — приклади: перевірте їх перед публікацією.</p>
+            <article v-for="(offer, key) in draft.offers" :key="key" class="admin-text-card admin-offer">
+              <h3>{{ key === 'certificate' ? 'Подарунковий сертифікат' : 'Навчання та уроки' }}</h3>
+              <label class="checkbox-label"><input v-model="offer.visible" type="checkbox">Показувати блок на сайті</label>
+              <label class="checkbox-label"><input v-model="offer.isExample" type="checkbox">Це приклад: показувати відповідну примітку на сайті</label>
+              <div class="admin-offer-image"><img :src="preview(offer.image)" :alt="offer.image.title"><label>Замінити фото<input type="file" accept="image/jpeg,image/png,image/webp" @change="replaceOfferImage($event, offer)"></label><p class="admin-help">JPG, PNG або WebP, до 5 МБ. Фото зміниться для всіх після публікації.</p></div>
+              <label>Опис зображення<input v-model.trim="offer.image.title" maxlength="200"></label>
+              <label>Короткий підзаголовок<input v-model.trim="offer.eyebrow" maxlength="100"></label>
+              <label>Заголовок<input v-model.trim="offer.title" maxlength="160"></label>
+              <label>Опис<textarea v-model.trim="offer.description" rows="5" maxlength="2000"></textarea></label>
+              <div class="admin-section-title"><label>{{ key === 'certificate' ? 'Номінал сертифіката' : 'Вартість заняття' }}<input v-model.trim="offer.price" maxlength="100" placeholder="1 000 грн"></label><label v-if="key === 'course'">Тривалість<input v-model.trim="offer.duration" maxlength="100" placeholder="90 хвилин"></label></div>
+              <p class="admin-help">{{ key === 'certificate' ? 'Переваги та умови сертифіката' : 'Що отримає клієнт після заняття' }}</p>
+              <div v-for="(benefit, index) in offer.benefits" :key="index" class="admin-section-title"><label>Пункт {{ index + 1 }}<input v-model.trim="offer.benefits[index]" maxlength="250"></label><button class="danger" :aria-label="`Видалити пункт ${index + 1}`" @click="offer.benefits.splice(index, 1)">Видалити</button></div>
+              <button :disabled="offer.benefits.length >= 8" @click="offer.benefits.push('')">+ Додати пункт</button>
+              <label>Текст кнопки<input v-model.trim="offer.buttonText" maxlength="80"></label>
+              <label>Посилання кнопки<input v-model.trim="offer.buttonUrl" maxlength="500" placeholder="https://www.instagram.com/diwa_m_/"></label>
+              <p class="admin-help">Дозволено HTTPS-посилання, номер у форматі tel:+380… або Viber. Зніміть позначку «Це приклад» лише після перевірки фото, цін і всіх умов пропозиції.</p>
+            </article>
+          </div>
         </fieldset>
       </template>
     </template>
@@ -100,6 +122,7 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { onBeforeRouteLeave } from 'vue-router';
 import { supabase, content, loadContent, publishContent, photoUrl } from '@/lib/content';
 import { validateContent } from '@/lib/contentRepository.mjs';
+import { contentImages } from '@/lib/offerDefaults.mjs';
 
 const session = ref(null);
 const booting = ref(Boolean(supabase));
@@ -185,6 +208,20 @@ function addPhotos(event) {
   }
   event.target.value = '';
 }
+function replaceOfferImage(event, offer) {
+  error.value = ''; message.value = '';
+  const file = event.target.files?.[0];
+  event.target.value = '';
+  if (!file) return;
+  if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type) || file.size > 5 * 1024 * 1024) {
+    error.value = 'Потрібне фото JPG, PNG або WebP розміром до 5 МБ.'; return;
+  }
+  const previous = files.get(offer.image.id);
+  if (previous) { URL.revokeObjectURL(previous.preview); files.delete(offer.image.id); }
+  const imageId = id();
+  files.set(imageId, { file, preview: URL.createObjectURL(file) });
+  offer.image = { id: imageId, title: offer.image.title };
+}
 function moveEntry(entries, index, direction) {
   if (index + direction < 0 || index + direction >= entries.length) return;
   const [entry] = entries.splice(index, 1);
@@ -218,15 +255,15 @@ async function publish() {
     error.value = 'Заповніть назви розділів, груп, послуг та описи фото перед публікацією.'; return;
   }
   const check = JSON.parse(JSON.stringify(draft.value));
-  check.photos = check.photos.map((photo) => files.has(photo.id) ? { ...photo, path: 'pending-upload' } : photo);
+  for (const image of contentImages(check)) { if (files.has(image.id)) image.path = 'pending-upload'; }
   if (!validateContent(check)) {
-    error.value = 'Перевірте заповнення всіх полів. Для відгуків потрібні ім’я та текст; посилання на джерело має починатися з https://. Для запитань потрібні запитання й відповідь.';
+    error.value = 'Перевірте заповнення всіх полів. Для відгуків потрібні ім’я та текст; посилання на джерело має починатися з https://. Для запитань потрібні запитання й відповідь. У пропозиціях заповніть назви, описи, ціну, опис фото, текст і безпечне посилання кнопки та тривалість уроку.';
     return;
   }
   busy.value = true;
   try {
     const next = JSON.parse(JSON.stringify(draft.value));
-    for (const photo of next.photos) {
+    for (const photo of contentImages(next)) {
       const entry = files.get(photo.id);
       if (!entry) continue;
       if (entry.path) { photo.path = entry.path; continue; }
@@ -290,7 +327,7 @@ input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px
 .admin-account { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 13px; overflow-wrap: anywhere; }
 .admin-toolbar { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; border: 1px solid var(--line); padding: 20px; background: var(--paper); }
 .admin-toolbar > div { flex: 1; min-width: 200px; font-size: 13px; }
-.admin-tabs { display: flex; gap: 12px; margin: 30px 0; }
+.admin-tabs { display: flex; flex-wrap: wrap; gap: 12px; margin: 30px 0; }
 .admin-tabs [aria-pressed="true"] { background: var(--graphite); color: white; }
 .admin-editor { border: none; min-width: 0; }
 .upload-label { display: inline-flex; border: 1px dashed var(--olive); padding: 18px; margin: 20px 0 10px; gap: 15px; max-width: 100%; }
@@ -310,6 +347,10 @@ textarea { resize: vertical; min-height: 100px; line-height: 1.7; }
 .admin-text-card { display: grid; gap: 20px; background: var(--paper); padding: 24px; margin: 24px 0; }
 .admin-text-card .admin-section-title { margin-bottom: 0; }
 .admin-text-card .admin-section-title label:last-child { flex: .4; }
+.admin-offer h3 { font-size: 30px; }
+.admin-offer-image img { width: min(100%, 440px); max-height: 320px; object-fit: contain; background: var(--bg); margin-bottom: 18px; }
+.admin-offer .checkbox-label { margin-top: 0; align-self: auto; }
+.admin-offer .admin-section-title label:last-child { flex: 1; }
 .admin-note { margin-top: 22px; }
 .admin-notice, .admin-message { padding: 20px; background: var(--paper); margin: 25px 0; line-height: 1.7; font-size: 14px; }
 .admin-message { border: 1px solid var(--line); box-shadow: 0 4px 24px #2b292714; }

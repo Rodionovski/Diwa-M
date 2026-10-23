@@ -127,3 +127,53 @@ test('review edits keep concurrency protection and do not mutate initial FAQ def
   await savePublished(client, first.data, 1);
   await assert.rejects(savePublished(client, second.data, 1), /Інший адміністратор/);
 });
+
+test('legacy content receives independent editable offers without a database migration', async () => {
+  const client = database({ data: defaults, revision: 4 });
+  const first = await readPublished(client);
+  const second = await readPublished(client);
+  assert.ok(validateContent(first.data));
+  assert.equal(first.data.offers.certificate.isExample, true);
+  assert.equal(first.data.offers.course.duration, '90 хвилин');
+  first.data.offers.course.benefits[0] = 'Тестова зміна';
+  assert.notEqual(first.data.offers.course.benefits[0], second.data.offers.course.benefits[0]);
+  assert.deepEqual(first.data.photos, defaults.photos);
+});
+
+test('offer text, prices, visibility, links and uploaded photos persist together', async () => {
+  const client = database({ data: defaults, revision: 1 });
+  const { data } = await readPublished(client);
+  data.offers.certificate.title = 'Тестовий сертифікат';
+  data.offers.certificate.price = '2 000 грн';
+  data.offers.certificate.isExample = false;
+  data.offers.certificate.image = { id: 'uploaded-certificate', path: 'admin/certificate.webp', title: 'Власний сертифікат' };
+  data.offers.certificate.buttonUrl = 'tel:+380674247498';
+  data.offers.course.visible = false;
+  data.offers.course.duration = '2 години';
+  await savePublished(client, data, 1);
+  const saved = await readPublished(client);
+  assert.deepEqual(saved.data.offers, data.offers);
+  assert.equal(saved.revision, 2);
+});
+
+test('offers reject unsafe links, empty content and missing image references', async () => {
+  const { data } = await readPublished(database({ data: defaults, revision: 1 }));
+  for (const patch of [{ buttonUrl: 'javascript:alert(1)' }, { buttonUrl: 'http://example.com' }, { buttonUrl: 'tel:hello' }, { buttonUrl: 'https://user:pass@example.com' }, { title: '' }, { isExample: 'false' }, { image: { id: 'a', title: 'Фото' } }, { benefits: [''] }]) {
+    const invalid = structuredClone(data);
+    Object.assign(invalid.offers.certificate, patch);
+    assert.equal(validateContent(invalid), false, JSON.stringify(patch));
+    await assert.rejects(savePublished({ from() { assert.fail('invalid input must not write'); } }, invalid, 1));
+  }
+  const noDuration = structuredClone(data);
+  noDuration.offers.course.duration = '';
+  assert.equal(validateContent(noDuration), false);
+});
+
+test('all new images participate in the shared upload pipeline', async () => {
+  const { contentImages } = await import('../src/lib/offerDefaults.mjs');
+  const { data } = await readPublished(database({ data: defaults, revision: 1 }));
+  const images = contentImages(data);
+  assert.equal(images.length, defaults.photos.length + 2);
+  images.find((image) => image.id === 'certificate-image').path = 'admin/new-certificate.png';
+  assert.equal(data.offers.certificate.image.path, 'admin/new-certificate.png');
+});

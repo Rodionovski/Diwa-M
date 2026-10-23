@@ -6,8 +6,9 @@
         <router-link to="/">Головна</router-link>
         <router-link to="/services">Послуги та ціни</router-link>
         <router-link to="/gallery">Наші роботи</router-link>
+        <router-link to="/offers">Сертифікати та навчання</router-link>
       </nav>
-      <a class="header-book" href="tel:+380674247498">Записатися <span>↗</span></a>
+      <a class="header-book" href="tel:+380674247498">Записатися</a>
     </div>
   </header>
 </template>

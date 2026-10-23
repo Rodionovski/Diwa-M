@@ -10,12 +10,12 @@
           <div class="review-rating" role="img" :aria-label="`Оцінка: ${review.rating} з 5`"><span aria-hidden="true">{{ '★'.repeat(review.rating) }}<span class="unfilled-stars">{{ '☆'.repeat(5 - review.rating) }}</span></span></div>
           <blockquote><p>{{ review.text }}</p></blockquote>
           <div class="review-person"><span class="review-initial" aria-hidden="true">{{ review.name.charAt(0) }}</span><div><p>{{ review.name }}</p><span v-if="review.service">{{ review.service }}</span></div></div>
-          <a v-if="review.source" :href="review.source" class="review-source" target="_blank" rel="noopener noreferrer">Оригінал відгуку ↗</a>
+          <a v-if="review.source" :href="review.source" class="review-source" target="_blank" rel="noopener noreferrer">Оригінал відгуку</a>
         </article>
       </div>
       <div class="review-bottom">
-        <a class="text-link" href="https://www.instagram.com/diwa_m_/" target="_blank" rel="noopener noreferrer">Поділитися враженнями в Instagram ↗</a>
-        <button v-if="reviews.length > 3" class="text-link" :aria-expanded="showAllReviews" aria-controls="review-list" @click="showAllReviews = !showAllReviews">{{ showAllReviews ? 'Показати менше ↑' : `Усі відгуки (${reviews.length}) ↓` }}</button>
+        <a class="text-link" href="https://www.instagram.com/diwa_m_/" target="_blank" rel="noopener noreferrer">Поділитися враженнями в Instagram</a>
+        <button v-if="reviews.length > 3" class="text-link" :aria-expanded="showAllReviews" aria-controls="review-list" @click="showAllReviews = !showAllReviews">{{ showAllReviews ? 'Показати менше' : `Усі відгуки (${reviews.length})` }}</button>
       </div>
     </div>
   </section>
@@ -25,7 +25,7 @@
       <p class="eyebrow">05 / ПЕРЕД ВІЗИТОМ</p>
       <h2 id="faq-title">Можливо, ви<br><em>хотіли запитати.</em></h2>
       <p>Кілька відповідей, щоб ваш перший крок до нас був простішим.</p>
-      <a class="text-link" href="viber://chat?number=%2B380674247498">Поставити своє запитання ↗</a>
+      <a class="text-link" href="viber://chat?number=%2B380674247498">Поставити своє запитання</a>
     </div>
     <div class="faq-list">
       <details v-for="(faq, index) in faqs" :key="faq.id" class="faq-item reveal" v-reveal="(index % 3) * 60">
@@ -41,15 +41,15 @@
         <p class="eyebrow">06 / ЗУСТРІНЕМОСЬ У DIWA-M</p>
         <h2 id="visit-title">Почнімо з маленького<br><em>часу для себе.</em></h2>
         <p>Оберіть послугу, напишіть або зателефонуйте нам.<br>Разом узгодимо зручний час для вашого візиту.</p>
-        <div class="visit-actions"><a class="button-primary" href="tel:+380674247498">Обговорити запис <span>↗</span></a><router-link class="text-link" to="/services">Спочатку переглянути прайс ↗</router-link></div>
+        <div class="visit-actions"><a class="button-primary" href="tel:+380674247498">Обговорити запис </a><router-link class="text-link" to="/services">Спочатку переглянути прайс</router-link></div>
         <ol class="visit-steps"><li><span>01</span>Оберіть послугу</li><li><span>02</span>Узгодьте час</li><li><span>03</span>Завітайте до нас</li></ol>
       </div>
       <div class="visit-address reveal" v-reveal="100">
         <span class="address-heart" aria-hidden="true">♡</span>
         <p class="eyebrow">ВАША ТОЧКА КРАСИ</p>
-        <h3>Хмельницький</h3>
-        <address>вул. Шевченка, 50</address>
-        <a class="text-link" :href="mapUrl" target="_blank" rel="noopener noreferrer">Прокласти маршрут ↗</a>
+        <h3>м. Хмельницький</h3>
+        <address>вул. Шевченка, 50 </address>
+        <a class="text-link" :href="mapUrl" target="_blank" rel="noopener noreferrer">Прокласти маршрут</a>
         <p class="address-note">Потрібна підказка, як нас знайти?<br><a href="tel:+380674247498">+38 (067) 424 74 98</a></p>
       </div>
     </div>

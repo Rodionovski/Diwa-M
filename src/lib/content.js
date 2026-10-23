@@ -9,7 +9,9 @@ import p3 from '@/assets/images/galery3.jpeg';
 import p4 from '@/assets/images/galery4.jpeg';
 import p5 from '@/assets/images/galery5.jpg';
 import p6 from '@/assets/images/galery6.jpeg';
-const assets = { 'galery1.webp': p1, 'galery2.jpg': p2, 'galery3.jpeg': p3, 'galery4.jpeg': p4, 'galery5.jpg': p5, 'galery6.jpeg': p6 };
+import certificateImage from '@/assets/images/gift-certificate.jpg';
+import courseImage from '@/assets/images/makiyazh.jpg';
+const assets = { 'gift-certificate.jpg': certificateImage, 'makiyazh.jpg': courseImage, 'galery1.webp': p1, 'galery2.jpg': p2, 'galery3.jpeg': p3, 'galery4.jpeg': p4, 'galery5.jpg': p5, 'galery6.jpeg': p6 };
 
 const url = process.env.VUE_APP_SUPABASE_URL;
 const key = process.env.VUE_APP_SUPABASE_ANON_KEY;

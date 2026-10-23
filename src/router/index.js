@@ -8,6 +8,7 @@ const routes = [
     { path: '/', component: HomePage },
     { path: '/services', component: ServicesPage },
     { path: '/gallery', component: GalleryPage },
+    { path: '/offers', component: () => import('../views/OffersPage.vue') },
     { path: '/admin', component: () => import('../views/AdminPage.vue') },
 ];
 
@@ -19,6 +20,7 @@ const router = createRouter({
         if (savedPosition) {
             return savedPosition;
         }
+        if (to.hash) return { el: to.hash, top: 24 };
         return {top: 0};
     }
 });

@@ -1,4 +1,5 @@
 import { withContentExtras } from './contentExtras.mjs';
+import { isOfferLink } from './offerDefaults.mjs';
 
 export function validateContent(data) {
   const text = (value, max, required = true) => typeof value === 'string' && value.length <= max && (!required || value.trim().length > 0);
@@ -15,6 +16,19 @@ export function validateContent(data) {
     text(review.source, 500, false) && safeLink(review.source)))) return false;
   if (data.faqs !== undefined && (!identified(data.faqs, 30) || !data.faqs.every((faq) =>
     text(faq.question, 200) && text(faq.answer, 1500)))) return false;
+  if (data.offers !== undefined) {
+    if (!data.offers || Array.isArray(data.offers) || Object.keys(data.offers).length !== 2) return false;
+    for (const key of ['certificate', 'course']) {
+      const offer = data.offers[key];
+      if (!offer || typeof offer.visible !== 'boolean' || typeof offer.isExample !== 'boolean' ||
+        !text(offer.eyebrow, 100) || !text(offer.title, 160) || !text(offer.description, 2000) ||
+        !text(offer.price, 100) || !text(offer.duration, 100, key === 'course') ||
+        !text(offer.buttonText, 80) || !text(offer.buttonUrl, 500) || !isOfferLink(offer.buttonUrl) ||
+        !Array.isArray(offer.benefits) || offer.benefits.length > 8 || !offer.benefits.every((item) => text(item, 250)) ||
+        !offer.image || !text(offer.image.id, 100) || !text(offer.image.title, 200) ||
+        !(text(offer.image.asset, 100) || text(offer.image.path, 300))) return false;
+    }
+  }
   return data.sections.every((section) => text(section.name, 120) && identified(section.groups, 50) &&
     section.groups.every((group) => text(group.name, 120) && text(group.note, 400, false) && identified(group.items, 100) &&
       group.items.every((item) => text(item.name, 200) && text(item.price, 80, false) && typeof item.divider === 'boolean'))) &&

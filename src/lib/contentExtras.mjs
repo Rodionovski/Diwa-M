@@ -1,3 +1,5 @@
+import { createDefaultOffers } from './offerDefaults.mjs';
+
 export const defaultFaqs = [
   { id: 'faq-booking', question: 'Як записатися на візит?', answer: 'Зателефонуйте за номером +38 (067) 424 74 98 або напишіть у Viber чи Instagram. У повідомленні вкажіть бажану послугу та зручний для вас час.' },
   { id: 'faq-price', question: 'Де переглянути вартість послуг?', answer: 'У розділі «Послуги та ціни» є наш прайс. Якщо вартість указана діапазоном або «від», уточніть остаточну суму для вашого запиту під час запису.' },
@@ -9,6 +11,7 @@ export const defaultFaqs = [
 export function withContentExtras(data) {
   return {
     ...data,
+    offers: data.offers ?? createDefaultOffers(),
     reviews: data.reviews ?? [],
     faqs: data.faqs ?? defaultFaqs.map((faq) => ({ ...faq })),
   };
